@@ -15,7 +15,8 @@ app.get('/',(req,res)=>
 //     {
 //         res.status(StatusCodes.OK).json({message: 'Api'})
 //     })
-app.use('/api/users',userRouter)   
+app.use('/api/users',userRouter)  
+app.use('/clients',userRouter) 
 app.listen(PORT,(req,res)=>
 {
     console.log(`Server running at port ${PORT}`)

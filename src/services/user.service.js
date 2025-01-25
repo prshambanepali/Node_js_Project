@@ -1,3 +1,4 @@
+import { readFile } from "./getdata.js";
 export const userFirstService=async (arg)=>{
 console.log("Reached Service Layer")
 console.log("Doing some database ")
@@ -17,3 +18,7 @@ else
     return {message: "Login Failed"};
 }
 };
+export const getAllUserService= async (data)=>
+{
+  await readFile("usersdata.txt");
+}
