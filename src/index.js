@@ -3,6 +3,8 @@ import 'dotenv/config'
 import userRouter from "./routes/user.routes.js"
 import StatusCodes  from "http-status-codes";
 import bodyParser from "body-parser";
+import { errorHandler } from "./lib/errorHandler.js";
+import { connectdb } from "./db/index.js";
 const app=express();
 const PORT=process.env.PORT;
 app.use(bodyParser.json()) 
@@ -17,7 +19,9 @@ app.get('/',(req,res)=>
 //     })
 app.use('/api/users',userRouter)  
 app.use('/clients',userRouter) 
+app.use(errorHandler)
 app.listen(PORT,(req,res)=>
 {
     console.log(`Server running at port ${PORT}`)
+    connectdb();
 })
