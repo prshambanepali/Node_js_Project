@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import StatusCodes  from "http-status-codes";
+import { prisma } from "../db/index.js";
 export const authMiddleWare=async (req,res,next)=>
 {
     const authHeader =req.headers.authorization;
@@ -16,8 +17,10 @@ export const authMiddleWare=async (req,res,next)=>
         const user= await prisma.user.findUnique({where:{ id: pload.sub}})
         if(!user)
         {
-            res.status(StatusCodes.UNAUTHORIZED)
+            res.status(StatusCodes.UNAUTHORIZED).json({message:"Unauthorized"})
         }
+        req.userId=userId
+        next()
     }
     catch(error)
     {
