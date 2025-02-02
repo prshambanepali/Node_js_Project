@@ -9,5 +9,6 @@ userRouter.post('/login', userLoginController)
 userRouter.get('/details', getAllUserController)
 userRouter.post("/register",SignUpController)
 userRouter.get("/:userId",authMiddleWare,getUserProfile)
+userRouter.get('/post', getAllUserController)
 // userRouter.get('/details', getAllUser)
 export default userRouter

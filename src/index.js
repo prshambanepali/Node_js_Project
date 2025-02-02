@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Router } from "express"
 import 'dotenv/config'
 import userRouter from "./routes/user.routes.js"
 import StatusCodes  from "http-status-codes";
@@ -21,7 +21,8 @@ app.get('/',(req,res)=>
 //         res.status(StatusCodes.OK).json({message: 'Api'})
 //     })
 app.use('/api/users',userRouter)  
-app.use('/clients',userRouter) 
+app.use('/clients',userRouter)
+app.use('/api/post',userRouter) 
 
 app.use(errorHandler)
 app.listen(PORT,(req,res)=>

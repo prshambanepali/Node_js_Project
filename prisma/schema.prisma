@@ -31,3 +31,13 @@ model User {
 
   @@map("users")
 }
+
+model post {
+  id         String   @unique @default(uuid())
+  content    String
+  likesCount Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("posts")
+}

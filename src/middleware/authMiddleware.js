@@ -10,8 +10,6 @@ export const authMiddleWare = async (req, res, next) => {
   try {
     const pload = jwt.verify(authToken, process.env.JWT_SECRETE);
     const userId = pload.sub;
-    console.log(pload)
-    console.log("asdfasd", userId);
     const user = await prisma.user.findUnique({ where: { id: pload.sub } });
     if (!user) {
       res.status(StatusCodes.UNAUTHORIZED).json({ message: "Unauthorized" });

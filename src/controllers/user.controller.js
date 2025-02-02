@@ -5,13 +5,14 @@ import {
   SignUpService,
   userProfileService,
 } from "../services/user.service.js";
-import { createUserSchema } from "../schemas/user.schema.js";
+import { createUserSchema, loginUserSchema } from "../schemas/user.schema.js";
 export const firstcontroller = async (req, res) => {
   const data = await userFirstService();
   res.status(StatusCodes.OK).json({ message: "First Controller" });
 };
 export const userLoginController = async (req, res, next) => {
   try {
+    loginUserSchema.parse(req.body);
     const data = await loginUserService(req.body);
     res.status(StatusCodes.OK).json(data);
   } catch (error) {
