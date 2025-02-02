@@ -4,8 +4,12 @@ import userRouter from "./routes/user.routes.js"
 import StatusCodes  from "http-status-codes";
 import bodyParser from "body-parser";
 import { errorHandler } from "./lib/errorHandler.js";
+import cors from "cors"
+
 const app=express();
 const PORT=process.env.PORT;
+
+app.use(cors())
 app.use(bodyParser.json()) 
 console.log(PORT)
 app.get('/',(req,res)=>
