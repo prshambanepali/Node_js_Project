@@ -1,24 +1,62 @@
-import { readFile } from "./getdata.js";
-export const userFirstService=async (arg)=>{
-console.log("Reached Service Layer")
-console.log("Doing some database ")
-const somedata="Data fetched!"
-return somedata;
+import { hash } from "bcrypt";
+import { prisma } from "../db/index.js";
+import { checkPassword, decryptpassword } from "../lib/password_utilities.js";
+import { generateJwtToken } from "../lib/jwt-utilities.js";
+
+export const loginUserService = async (loginData) => {
+  const email = loginData.email;
+  const password = loginData.password;
+  const user = await prisma.user.findUnique({ where: { email: email } });
+  if (!user) {
+    throw new Error("Invalid Credentials", { cause: "CustomError" });
+  }
+
+  const isPassword = await checkPassword(password, user.password);
+  if (!isPassword) {
+    throw new Error("Invalid Credentials", { cause: "CustomError" });
+  }
+  const token = generateJwtToken(user.id);
+  console.log(token);
+  delete user.password;
+  return { message: "Login succesfull", user, token };
 };
-export const loginUserService=async (loginData)=>{
-const email=loginData.email;
-const password=loginData.password;
-console.log("Checking Database for Login!");
-if(email=="prasham@gmail.com"&&password=="123")
-{
-    return {message: "Login Sucessfull!"};
-}
-else
-{
-    return {message: "Login Failed"};
-}
+export const getAllUserService = async () => {
+  const allUsers = await prisma.user.findMany({ omit: { password: true } });
+  return allUsers;
 };
-export const getAllUserService= async (data)=>
-{
-  await readFile("usersdata.txt");
-}
+getAllUserService()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+export const SignUpService = async (signUpData) => {
+  const HashedPassword = await decryptpassword(signUpData.password);
+  const res = await prisma.user.create({
+    data: {
+      fullName: signUpData.fullName,
+      password: HashedPassword,
+      email: signUpData.email,
+      gender: signUpData.gender,
+    },
+    omit: {
+      password: true,
+    },
+  });
+  const token = generateJwtToken(res.id);
+  return { user: res, token };
+};
+export const userProfileService = async (userId) => {
+  console.log(userId);
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    omit: { password: true },
+  });
+  return user;
+};
