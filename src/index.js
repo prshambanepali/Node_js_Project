@@ -5,6 +5,7 @@ import StatusCodes  from "http-status-codes";
 import bodyParser from "body-parser";
 import { errorHandler } from "./lib/errorHandler.js";
 import cors from "cors"
+import postRouter from "./routes/post.routes.js";
 
 const app=express();
 const PORT=process.env.PORT;
@@ -22,7 +23,7 @@ app.get('/',(req,res)=>
 //     })
 app.use('/api/users',userRouter)  
 app.use('/clients',userRouter)
-app.use('/api/post',userRouter) 
+app.use('/api/post',postRouter) 
 
 app.use(errorHandler)
 app.listen(PORT,(req,res)=>

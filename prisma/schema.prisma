@@ -25,7 +25,7 @@ model User {
   email    String     @unique
   password String
   gender   GenderEnum
-
+  posts   post[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
@@ -36,8 +36,10 @@ model post {
   id         String   @unique @default(uuid())
   content    String
   likesCount Int      @default(0)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String   
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
-
   @@map("posts")
 }
