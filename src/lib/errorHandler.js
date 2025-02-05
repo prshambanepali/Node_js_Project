@@ -55,6 +55,7 @@ export const errorHandler = (error, req, res, next) => {
     res
       .status(StatusCodes.BAD_REQUEST)
       .json({ error: "Invalid data", message: errorMessages });
+    return;
   }
 
   // Catch-all for unexpected errors

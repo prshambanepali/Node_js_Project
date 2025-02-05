@@ -6,6 +6,7 @@ import {
   getPostByIdService,
   UpdatePostService,
 } from "../services/post.service.js";
+import { createPostSchema } from "../schemas/post.schema.js";
 export const getAllPostsController = async (req, res, next) => {
   try {
     const post = await getAllPostsService(req.body);
@@ -17,6 +18,7 @@ export const getAllPostsController = async (req, res, next) => {
 };
 export const createPostController = async (req, res, next) => {
   try {
+    createPostSchema.parse(req.body);
     const data = await createPostService(req.body, req.userId);
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
