@@ -36,7 +36,6 @@ export const getAllUserController = async (req, res) => {
 };
 export const getUserProfile = async (req, res, next) => {
   try {
-    console.log("asdfasdf", req.userId);
     const data = await userProfileService(req.userId);
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {

@@ -1,5 +1,11 @@
 import StatusCodes from "http-status-codes";
-import { createPostService, getAllPostsService } from "../services/post.service.js";
+import {
+  createPostService,
+  DeletePostService,
+  getAllPostsService,
+  getPostByIdService,
+  UpdatePostService,
+} from "../services/post.service.js";
 export const getAllPostsController = async (req, res, next) => {
   try {
     const post = await getAllPostsService(req.body);
@@ -11,7 +17,7 @@ export const getAllPostsController = async (req, res, next) => {
 };
 export const createPostController = async (req, res, next) => {
   try {
-    const data = await createPostService(req.body);
+    const data = await createPostService(req.body, req.userId);
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
     console.log(error);
@@ -20,8 +26,25 @@ export const createPostController = async (req, res, next) => {
 };
 export const getPostByIdController = async (req, res, next) => {
   try {
-    createUserSchema.parse(req.body);
-    const data = await SignUpService(req.body);
+    const data = await getPostByIdService(req.params);
+    res.status(StatusCodes.ACCEPTED).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+export const UpdatePostController = async (req, res, next) => {
+  try {
+    const data = await UpdatePostService(req.body);
+    res.status(StatusCodes.ACCEPTED).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+export const DeletePostController = async (req, res, next) => {
+  try {
+    const data = await DeletePostService(req.body);
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
     console.log(error);
