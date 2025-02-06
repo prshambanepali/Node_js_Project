@@ -2,6 +2,7 @@ import StatusCodes from "http-status-codes";
 import {
   createPostService,
   DeletePostService,
+  getAllPostByIdService,
   getAllPostsService,
   getPostByIdService,
   UpdatePostService,
@@ -35,9 +36,18 @@ export const getPostByIdController = async (req, res, next) => {
     next(error);
   }
 };
+export const getAllPostByIdController = async (req, res, next) => {
+  try {
+    const data = await getAllPostByIdService(req.params.userId);
+    res.status(StatusCodes.ACCEPTED).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 export const UpdatePostController = async (req, res, next) => {
   try {
-    const data = await UpdatePostService(req.body);
+    const data = await UpdatePostService(req.params.postId, req.body);
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
     console.log(error);

@@ -10,17 +10,27 @@ import { authMiddleWare } from "../middleware/authMiddleware.js";
 import {
   createPostController,
   DeletePostController,
+  getAllPostByIdController,
   getAllPostsController,
   getPostByIdController,
   UpdatePostController,
 } from "../controllers/post.controller.js";
 
 const postRouter = Router();
-
-postRouter.get("/", authMiddleWare, getAllPostsController);
-postRouter.post("/", authMiddleWare, createPostController);
-postRouter.get("/getall/:postId", getPostByIdController);
-postRouter.post("/update/:postId", authMiddleWare, UpdatePostController);
-postRouter.post("/delete/:postId", authMiddleWare, DeletePostController);
+postRouter
+  .route("/")
+  .get(authMiddleWare, getAllPostsController)
+  .post(authMiddleWare, createPostController);
+//OR
+// postRouter.get("/", authMiddleWare, getAllPostsController);
+// postRouter.post("/", authMiddleWare, createPostController);
+postRouter
+  .route("/:postId")
+  .get(authMiddleWare, getPostByIdController)
+  //OR
+  // postRouter.get("/getall/:postId", authMiddleWare, getPostByIdController);
+  .patch(authMiddleWare, UpdatePostController)
+  .delete(authMiddleWare, DeletePostController);
+postRouter.get("/getall/:userId", authMiddleWare, getAllPostByIdController);
 // postRouter.get('/details', getAllUser)
 export default postRouter;

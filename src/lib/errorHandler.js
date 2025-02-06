@@ -58,6 +58,12 @@ export const errorHandler = (error, req, res, next) => {
     return;
   }
 
+  if (error?.cause == "NotFoundCustomError") {
+    res.status(StatusCodes.UNAUTHORIZED).json({
+      error: "No posts!!",
+      message: error.message,
+    });
+  }
   // Catch-all for unexpected errors
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     error: "Internal Server Error",

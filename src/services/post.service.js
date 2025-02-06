@@ -14,15 +14,26 @@ export const createPostService = async (postData, userId) => {
   return userAndPosts;
 };
 export const getPostByIdService = async (user) => {
-  console.log(user);
   const userAndPosts = await prisma.post.findUnique({
     where: { id: user.postId },
   });
+  if (!userAndPosts) {
+    throw new Error("Post not found", { cause: "NotFoundCustomError" });
+  }
   return userAndPosts;
 };
-export const UpdatePostService = async (user) => {
+export const getAllPostByIdService = async (user) => {
+  const userAndPosts = await prisma.post.findMany({
+    where: { authorId: user },
+  });
+  // if (!userAndPosts) {
+  //   throw new Error("Post not found", { cause: "NotFoundCustomError" });
+  // }
+  return userAndPosts;
+};
+export const UpdatePostService = async (postId, user) => {
   const userAndPosts = await prisma.post.update({
-    where: { id: user.postId },
+    where: { id: postId },
     data: {
       content: user.content,
     },
