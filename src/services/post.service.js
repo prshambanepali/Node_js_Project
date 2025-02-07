@@ -40,9 +40,22 @@ export const UpdatePostService = async (postId, user) => {
   });
   return userAndPosts;
 };
-export const DeletePostService = async (user) => {
-  const Posts = await prisma.post.delete({
-    where: { id: user.id },
+export const DeletePostByIdService = async (postId,loggedInUseruserId) => {
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
   });
-  return Posts;
+  if (!post) {
+    throw new Error("Post not found", { cause: "NotFoundCustomError" });
+  }
+
+  if (post.authorId !== loggedInUseruserId) {
+    throw new Error("You cannot perform this Action", {
+      cause: "UnauthorizedCustomError",
+    });
+  } else {
+    const deletedposts = await prisma.post.delete({
+      where: { id: postId },
+    });
+    return deletedposts;
+  }
 };

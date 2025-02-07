@@ -21,3 +21,4 @@ export const authMiddleWare = async (req, res, next) => {
     next(error);
   }
 };
+  

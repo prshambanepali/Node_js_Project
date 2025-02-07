@@ -1,7 +1,7 @@
 import StatusCodes from "http-status-codes";
 import {
   createPostService,
-  DeletePostService,
+  DeletePostByIdService,
   getAllPostByIdService,
   getAllPostsService,
   getPostByIdService,
@@ -54,10 +54,14 @@ export const UpdatePostController = async (req, res, next) => {
     next(error);
   }
 };
-export const DeletePostController = async (req, res, next) => {
+export const DeletePostByIdController = async (req, res, next) => {
   try {
-    const data = await DeletePostService(req.body);
-    res.status(StatusCodes.ACCEPTED).json(data);
+    const postId = req.params.postId;
+    const loggedInUser = req.userId;
+    const data = await DeletePostByIdService(postId,loggedInUser);
+    res
+      .status(StatusCodes.ACCEPTED)
+      .json({ message: "Post Deleted Successfully" });
   } catch (error) {
     console.log(error);
     next(error);

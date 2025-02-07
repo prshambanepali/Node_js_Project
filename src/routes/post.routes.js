@@ -9,7 +9,7 @@ import {
 import { authMiddleWare } from "../middleware/authMiddleware.js";
 import {
   createPostController,
-  DeletePostController,
+  DeletePostByIdController,
   getAllPostByIdController,
   getAllPostsController,
   getPostByIdController,
@@ -30,7 +30,7 @@ postRouter
   //OR
   // postRouter.get("/getall/:postId", authMiddleWare, getPostByIdController);
   .patch(authMiddleWare, UpdatePostController)
-  .delete(authMiddleWare, DeletePostController);
+  .delete(authMiddleWare, DeletePostByIdController);
 postRouter.get("/getall/:userId", authMiddleWare, getAllPostByIdController);
 // postRouter.get('/details', getAllUser)
 export default postRouter;
