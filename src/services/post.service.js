@@ -38,16 +38,17 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
   if (!post) {
     throw new Error("Post not found", { cause: "NotFoundCustomError" });
   }
-  if (updateData.likeCase == "like") {
-    post.likesCount += 1;
-  } else if (updateData.likeCase == "unlike") {
-    if (post.likesCount > 0) {
-      post.likesCount -= 1;
-    }
-  }
-  if (updateData.content) {
-    post.content = updateData.content;
-  }
+  // if (updateData.likeCase == "like") {
+  //   post.likesCount += 1;
+  // } else if (updateData.likeCase == "unlike") {
+  //   if (post.likesCount > 0) {
+  //     post.likesCount -= 1;
+  //   }
+  // }
+
+  // if (updateData.content) {
+  //   post.content = updateData.content;
+  // }
   if (post.authorId !== loggedInUserId) {
     throw new Error("You cannot perform this Action", {
       cause: "UnauthorizedCustomError",
@@ -55,7 +56,10 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
   } else {
     const userAndPosts = await prisma.post.update({
       where: { id: postId },
-      data: post,
+      data: {
+        content: updateData.content,
+        likesCount: updateData.likeFlag ? post.likesCount + 1 : post.likesCount,
+      },
     });
     return userAndPosts;
   }
