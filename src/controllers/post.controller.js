@@ -5,7 +5,7 @@ import {
   getAllPostByIdService,
   getAllPostsService,
   getPostByIdService,
-  UpdatePostService,
+  updatePostService,
 } from "../services/post.service.js";
 import { createPostSchema } from "../schemas/post.schema.js";
 export const getAllPostsController = async (req, res, next) => {
@@ -45,9 +45,14 @@ export const getAllPostByIdController = async (req, res, next) => {
     next(error);
   }
 };
-export const UpdatePostController = async (req, res, next) => {
+export const updatePostController = async (req, res, next) => {
   try {
-    const data = await UpdatePostService(req.params.postId, req.body);
+    const loggedInUser = req.userId;
+    const data = await updatePostService(
+      req.params.postId,
+      loggedInUser,
+      req.body
+    );
     res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
     console.log(error);
@@ -58,7 +63,7 @@ export const DeletePostByIdController = async (req, res, next) => {
   try {
     const postId = req.params.postId;
     const loggedInUser = req.userId;
-    const data = await DeletePostByIdService(postId,loggedInUser);
+    const data = await DeletePostByIdService(postId, loggedInUser);
     res
       .status(StatusCodes.ACCEPTED)
       .json({ message: "Post Deleted Successfully" });

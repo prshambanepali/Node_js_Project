@@ -13,7 +13,7 @@ import {
   getAllPostByIdController,
   getAllPostsController,
   getPostByIdController,
-  UpdatePostController,
+  updatePostController,
 } from "../controllers/post.controller.js";
 
 const postRouter = Router();
@@ -29,7 +29,7 @@ postRouter
   .get(authMiddleWare, getPostByIdController)
   //OR
   // postRouter.get("/getall/:postId", authMiddleWare, getPostByIdController);
-  .patch(authMiddleWare, UpdatePostController)
+  .patch(authMiddleWare, updatePostController)
   .delete(authMiddleWare, DeletePostByIdController);
 postRouter.get("/getall/:userId", authMiddleWare, getAllPostByIdController);
 // postRouter.get('/details', getAllUser)
