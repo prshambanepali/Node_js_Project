@@ -1,7 +1,9 @@
 import { prisma } from "../db/index.js";
 
 export const getAllPostsService = async () => {
-  const posts = await prisma.post.findMany();
+  const posts = await prisma.post.findMany({
+    include: { author: { omit: { password: true } } },
+  });
   return posts;
 };
 export const createPostService = async (postData, userId) => {
@@ -49,6 +51,15 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
   // if (updateData.content) {
   //   post.content = updateData.content;
   // }
+  if (updateData.like) {
+    const data = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        likesCount: post.likesCount + 1,
+      },
+    });
+    return data;
+  }
   if (post.authorId !== loggedInUserId) {
     throw new Error("You cannot perform this Action", {
       cause: "UnauthorizedCustomError",
@@ -58,7 +69,6 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
       where: { id: postId },
       data: {
         content: updateData.content,
-        likesCount: updateData.likeFlag ? post.likesCount + 1 : post.likesCount,
       },
     });
     return userAndPosts;
