@@ -10,7 +10,7 @@ import {
 import { createPostSchema } from "../schemas/post.schema.js";
 export const getAllPostsController = async (req, res, next) => {
   try {
-    const post = await getAllPostsService(req.body);
+    const post = await getAllPostsService(req.query);
     res.status(StatusCodes.ACCEPTED).json(post);
   } catch (error) {
     console.log(error);

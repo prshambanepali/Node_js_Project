@@ -1,10 +1,18 @@
 import { prisma } from "../db/index.js";
 
-export const getAllPostsService = async () => {
-  const posts = await prisma.post.findMany({
+export const getAllPostsService = async (query) => {
+  let searchTerm = "";
+  if (query.search) {
+    searchTerm = query.search;
+  }
+  const Allposts = await prisma.post.findMany({
+    where: {
+      content: { contains: searchTerm, mode: "insensitive" },
+    },
+    orderBy: { createdAt: "desc" },
     include: { author: { omit: { password: true } } },
   });
-  return posts;
+  return Allposts;
 };
 export const createPostService = async (postData, userId) => {
   const userAndPosts = await prisma.post.create({
